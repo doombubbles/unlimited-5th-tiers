@@ -2,7 +2,7 @@
 
 # Unlimited 5th Tiers +
 
-## NOTE: This version of the mod requires BTD6 Mod Helper >v3.0 and MelonLoader >v0.6
+## NOTE: This alpha version of the mod requires BTD6 Mod Helper >v3.0, see [here](https://github.com/doombubbles/BTD6-Mods#readme) for the stable mods
 
 <img alt="Screenshot" src="https://github.com/doombubbles/BTD6-Mods/blob/main/Unlimited5thTiers/image.png?raw=true" height="300" />
 
