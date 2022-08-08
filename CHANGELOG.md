@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.1
+
+- Fixed for BTD6 v32.0
+
 ### 1.1.0
 
 - Update for Mod Helper v3.0

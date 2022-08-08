@@ -24,24 +24,6 @@ namespace Unlimited5thTiers;
 
 public class Unlimited5thTiersMod : BloonsTD6Mod
 {
-    private static readonly ModSettingBool AllowUnlimited5thTiers = new(true)
-    {
-        displayName = "Allow Unlimited 5th Tiers",
-        icon = ModContent.GetSpriteReference<Unlimited5thTiersMod>("Icon")
-    };
-        
-    private static readonly ModSettingBool AllowUnlimitedParagons = new(true)
-    {
-        displayName = "Allow Unlimited Paragons",
-        icon = VanillaSprites.ParagonIcon
-    };
-        
-    private static readonly ModSettingBool AllowUnlimitedVTSGs = new(true)
-    {
-        displayName = "Allow Unlimited VTSGs",
-        icon = VanillaSprites.SuperMonkey555
-    };
-
     public override void OnNewGameModel(GameModel gameModel, List<ModModel> mods)
     {
         foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
@@ -61,7 +43,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPostfix]
         internal static void Postfix(TowerManager __instance, ref bool __result)
         {
-            if (AllowUnlimited5thTiers)
+            if (Settings.AllowUnlimited5thTiers)
             {
                 __result = false;
             }
@@ -74,7 +56,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPrefix]
         internal static bool Prefix(MonkeyTemple __instance)
         {
-            if (AllowUnlimitedVTSGs && __instance.checkTCBOO &&
+            if (Settings.AllowUnlimitedVTSGs && __instance.checkTCBOO &&
                 __instance.monkeyTempleModel.weaponDelayFrames + __instance.lastSacrificed <=
                 __instance.Sim.time.elapsed && __instance.monkeyTempleModel.checkForThereCanOnlyBeOne
                 && __instance.lastSacrificed != __instance.Sim.time.elapsed)
@@ -117,7 +99,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         internal static void Postfix(Tower __instance, ref bool __result)
         {
             if (__instance.Sim.towerManager.IsParagonLocked(__instance, __instance.owner) ||
-                __instance.towerModel.paragonUpgrade == null || !AllowUnlimitedParagons)
+                __instance.towerModel.paragonUpgrade == null || !Settings.AllowUnlimitedParagons)
             {
                 return;
             }

@@ -2,7 +2,7 @@
 
 public static class ModHelperData
 {
-    public const string Version = "1.1.0";
+    public const string Version = "1.1.1";
     public const string Name = "Unlimited 5th Tiers +";
 
     public const string Description =
