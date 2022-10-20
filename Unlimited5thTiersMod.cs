@@ -56,10 +56,12 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPrefix]
         internal static bool Prefix(MonkeyTemple __instance)
         {
-            if (Settings.AllowUnlimitedVTSGs && __instance.checkTCBOO &&
+            if (Settings.AllowUnlimitedVTSGs &&
+                __instance.checkTCBOO &&
                 __instance.monkeyTempleModel.weaponDelayFrames + __instance.lastSacrificed <=
-                __instance.Sim.time.elapsed && __instance.monkeyTempleModel.checkForThereCanOnlyBeOne
-                && __instance.lastSacrificed != __instance.Sim.time.elapsed)
+                __instance.Sim.time.elapsed &&
+                __instance.monkeyTempleModel.checkForThereCanOnlyBeOne &&
+                __instance.lastSacrificed != __instance.Sim.time.elapsed)
             {
                 var superMonkeys = __instance.Sim.towerManager.GetTowersByBaseId(TowerType.SuperMonkey).ToList()
                     .Where(tower => tower.Id != __instance.tower.Id).ToList();
@@ -99,7 +101,8 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         internal static void Postfix(Tower __instance, ref bool __result)
         {
             if (__instance.Sim.towerManager.IsParagonLocked(__instance, __instance.owner) ||
-                __instance.towerModel.paragonUpgrade == null || !Settings.AllowUnlimitedParagons)
+                __instance.towerModel.paragonUpgrade == null ||
+                !Settings.AllowUnlimitedParagons)
             {
                 return;
             }
@@ -114,6 +117,22 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
             }
 
             __result = true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Tower), nameof(Tower.HasParagonLimitBeenReached))]
+    internal static class Tower_HasParagonLimitBeenReached
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(ref bool __result)
+        {
+            if (Settings.AllowUnlimitedParagons)
+            {
+                __result = false;
+                return false;
+            }
+
+            return true;
         }
     }
 }

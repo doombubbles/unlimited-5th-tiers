@@ -1,1 +1,1 @@
-- Fixed for BTD6 v32.0
+- Updated for BTD6 v33 for bypassing paragon cap
