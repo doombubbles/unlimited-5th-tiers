@@ -1,18 +1,14 @@
-﻿using System;
-using System.Linq;
-using Assets.Scripts.Models;
-using Assets.Scripts.Models.Towers;
-using Assets.Scripts.Models.Towers.Behaviors;
-using Assets.Scripts.Models.Towers.Mods;
-using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Simulation.Towers.Behaviors;
-using Assets.Scripts.Utils;
+﻿using System.Linq;
+using Il2CppAssets.Scripts.Models;
+using Il2CppAssets.Scripts.Models.Towers;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Mods;
+using Il2CppAssets.Scripts.Simulation.Towers;
+using Il2CppAssets.Scripts.Simulation.Towers.Behaviors;
 using BTD_Mod_Helper;
-using BTD_Mod_Helper.Api;
-using BTD_Mod_Helper.Api.Enums;
-using BTD_Mod_Helper.Api.ModOptions;
 using BTD_Mod_Helper.Extensions;
 using HarmonyLib;
+using Il2CppAssets.Scripts.Simulation.Input;
 using Il2CppSystem.Collections.Generic;
 using MelonLoader;
 using Unlimited5thTiers;
@@ -28,14 +24,12 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     {
         foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
         {
-            if (superMonkey.GetDescendant<MonkeyTempleModel>() is MonkeyTempleModel monkeyTempleModel &&
-                monkeyTempleModel.towerGroupCount < 4)
+            if (superMonkey.GetDescendant<MonkeyTempleModel>() is { towerGroupCount: < 4 } monkeyTempleModel)
             {
                 monkeyTempleModel.towerGroupCount = 4;
             }
         }
     }
-
 
     [HarmonyPatch(typeof(TowerManager), nameof(TowerManager.IsTowerPathTierLocked))]
     internal class TowerManager_IsTowerPathTierLocked
@@ -120,7 +114,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         }
     }
 
-    [HarmonyPatch(typeof(Tower), nameof(Tower.HasParagonLimitBeenReached))]
+    [HarmonyPatch(typeof(Tower), nameof(Tower.HasReachedParagonLimit))]
     internal static class Tower_HasParagonLimitBeenReached
     {
         [HarmonyPrefix]
@@ -132,6 +126,21 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
                 return false;
             }
 
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.IsPathTierLocked))]
+    internal static class TowerInventory_IsPathTierLocked
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(int tier, ref bool __result)
+        {
+            if (tier == 5)
+            {
+                __result = false;
+                return false;
+            }
             return true;
         }
     }
