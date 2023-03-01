@@ -1,1 +1,1 @@
-- Updated for BTD6 v33 for bypassing paragon cap
+- Should now work in even more situations, such as with Insta Monkeys / the Insta Monkey Rework mod

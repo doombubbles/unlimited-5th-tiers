@@ -1,18 +1,17 @@
 ﻿using System.Linq;
+using BTD_Mod_Helper;
+using BTD_Mod_Helper.Extensions;
+using HarmonyLib;
 using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Mods;
+using Il2CppAssets.Scripts.Simulation.Input;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Simulation.Towers.Behaviors;
-using BTD_Mod_Helper;
-using BTD_Mod_Helper.Extensions;
-using HarmonyLib;
-using Il2CppAssets.Scripts.Simulation.Input;
 using Il2CppSystem.Collections.Generic;
 using MelonLoader;
 using Unlimited5thTiers;
-
 [assembly: MelonInfo(typeof(Unlimited5thTiersMod), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
@@ -20,6 +19,9 @@ namespace Unlimited5thTiers;
 
 public class Unlimited5thTiersMod : BloonsTD6Mod
 {
+    /// <summary>
+    /// Sun Temples with 4 Sacrifice Groups
+    /// </summary>
     public override void OnNewGameModel(GameModel gameModel, List<ModModel> mods)
     {
         foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
@@ -31,19 +33,63 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         }
     }
 
-    [HarmonyPatch(typeof(TowerManager), nameof(TowerManager.IsTowerPathTierLocked))]
-    internal class TowerManager_IsTowerPathTierLocked
+    /// <summary>
+    /// Unlimited 5th Tiers
+    /// </summary>
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.IsPathTierLocked))]
+    internal static class TowerInventory_IsPathTierLocked
     {
-        [HarmonyPostfix]
-        internal static void Postfix(TowerManager __instance, ref bool __result)
+        [HarmonyPrefix]
+        private static bool Prefix(int tier, ref bool __result)
         {
-            if (Settings.AllowUnlimited5thTiers)
+            if (tier == 5 && Settings.AllowUnlimited5thTiers)
             {
                 __result = false;
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Unlimited 5th Tiers
+    /// </summary>
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.HasUpgradeInventory))]
+    internal static class TowerInventory_HasInventory
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(TowerModel def, ref bool __result)
+        {
+            if (def.tier == 5 && Settings.AllowUnlimited5thTiers)
+            {
+                __result = true;
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Non-maxed Vengeful Temples
+    /// </summary>
+    [HarmonyPatch(typeof(MonkeyTemple), nameof(MonkeyTemple.StartSacrifice))]
+    public class MonkeyTemple_StartSacrifice
+    {
+        [HarmonyPostfix]
+        public static void Postfix(MonkeyTemple __instance)
+        {
+            if (__instance.monkeyTempleModel.checkForThereCanOnlyBeOne && !__instance.checkTCBOO)
+            {
+                __instance.checkTCBOO = true;
             }
         }
     }
 
+    /// <summary>
+    /// Non-maxed Vengeful Temples
+    /// </summary>
     [HarmonyPatch(typeof(MonkeyTemple), nameof(MonkeyTemple.CheckTCBOO))]
     internal class MonkeyTemple_CheckTCBOO
     {
@@ -74,20 +120,9 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         }
     }
 
-    [HarmonyPatch(typeof(MonkeyTemple), nameof(MonkeyTemple.StartSacrifice))]
-    public class MonkeyTemple_StartSacrifice
-    {
-        [HarmonyPostfix]
-        public static void Postfix(MonkeyTemple __instance)
-        {
-            if (__instance.monkeyTempleModel.checkForThereCanOnlyBeOne && !__instance.checkTCBOO)
-            {
-                __instance.checkTCBOO = true;
-            }
-        }
-    }
-
-
+    /// <summary>
+    /// Unlimited / Sandbox Paragons
+    /// </summary>
     [HarmonyPatch(typeof(Tower), nameof(Tower.CanUpgradeToParagon))]
     internal class Tower_CanUpgradeToParagon
     {
@@ -114,6 +149,9 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         }
     }
 
+    /// <summary>
+    /// Unlimited Paragons
+    /// </summary>
     [HarmonyPatch(typeof(Tower), nameof(Tower.HasReachedParagonLimit))]
     internal static class Tower_HasParagonLimitBeenReached
     {
@@ -126,21 +164,6 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
                 return false;
             }
 
-            return true;
-        }
-    }
-
-    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.IsPathTierLocked))]
-    internal static class TowerInventory_IsPathTierLocked
-    {
-        [HarmonyPrefix]
-        private static bool Prefix(int tier, ref bool __result)
-        {
-            if (tier == 5)
-            {
-                __result = false;
-                return false;
-            }
             return true;
         }
     }

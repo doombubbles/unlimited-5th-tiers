@@ -10,5 +10,5 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
 
-    <Import Project="..\btd6.targets" />
+    <Import Project="..\btd6.targets"/>
 </Project>

@@ -2,15 +2,15 @@
 
 public static class ModHelperData
 {
-    public const string WorksOnVersion = "34.3";
-    public const string Version = "1.1.3";
+    public const string WorksOnVersion = "35.0";
+    public const string Version = "1.1.4";
     public const string Name = "Unlimited 5th Tiers +";
 
     public const string Description =
         "- Unlimited amount of the same 5th tier tower allowed\n" +
         "- Unlimited amount of the same Paragon tower allowed\n" +
         "- Unlimited amount of Vengeful True Sun Gods allowed\n" +
-        "- All of the above naturally usable  in Sandbox mode\n" +
+        "- All of the above naturally usable in Sandbox mode\n" +
         "- True Sun Gods can still become Vengeful even if not fully sacrificed\n" +
         "- 1/1/1/1 and 2/2/2/2 Sacrifices are allowed";
 
