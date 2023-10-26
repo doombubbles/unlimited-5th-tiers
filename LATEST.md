@@ -1,1 +1,2 @@
-- Should now work in even more situations, such as with Insta Monkeys / the Insta Monkey Rework mod
+- Recompiled for BTD6 v39
+- Unlimited 5th Tiers no longer bypasses challenge rule restrictions

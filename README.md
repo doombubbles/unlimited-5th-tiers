@@ -7,7 +7,7 @@
 
 ### Lets you use any amount of fith tier towers in BTD6, and more
 
-<img alt="Screenshot" src="https://github.com/doombubbles/BTD6-Mods/blob/main/Unlimited5thTiers/image.png?raw=true" height="300" />
+<img alt="Screenshot" src="image.png" height="300" />
 
 ### Features
 

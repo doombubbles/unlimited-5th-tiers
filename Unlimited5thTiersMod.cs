@@ -5,7 +5,7 @@ using HarmonyLib;
 using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Mods;
+using Il2CppAssets.Scripts.Models.TowerSets;
 using Il2CppAssets.Scripts.Simulation.Input;
 using Il2CppAssets.Scripts.Simulation.Towers;
 using Il2CppAssets.Scripts.Simulation.Towers.Behaviors;
@@ -22,7 +22,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     /// <summary>
     /// Sun Temples with 4 Sacrifice Groups
     /// </summary>
-    public override void OnNewGameModel(GameModel gameModel, List<ModModel> mods)
+    public override void OnNewGameModel(GameModel gameModel)
     {
         foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
         {
@@ -36,38 +36,24 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     /// <summary>
     /// Unlimited 5th Tiers
     /// </summary>
-    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.IsPathTierLocked))]
-    internal static class TowerInventory_IsPathTierLocked
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.SetTowerTierRestrictions))]
+    internal static class TowerInventory_SetTowerTierRestrictions
     {
-        [HarmonyPrefix]
-        private static bool Prefix(int tier, ref bool __result)
+        [HarmonyPostfix]
+        private static void Postfix(TowerInventory __instance, IEnumerable<TowerDetailsModel> towers)
         {
-            if (tier == 5 && Settings.AllowUnlimited5thTiers)
+            if (!Settings.AllowUnlimited5thTiers) return;
+
+            towers.ForEach(towerDetails =>
             {
-                __result = false;
-                return false;
-            }
-
-            return true;
-        }
-    }
-
-    /// <summary>
-    /// Unlimited 5th Tiers
-    /// </summary>
-    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.HasUpgradeInventory))]
-    internal static class TowerInventory_HasInventory
-    {
-        [HarmonyPrefix]
-        private static bool Prefix(TowerModel def, ref bool __result)
-        {
-            if (def.tier == 5 && Settings.AllowUnlimited5thTiers)
-            {
-                __result = true;
-                return false;
-            }
-
-            return true;
+                if (towerDetails.Is<ShopTowerDetailsModel>())
+                {
+                    for (var path = 0; path < 3; path++)
+                    {
+                        __instance.AddTierRestriction(towerDetails.towerId, path, 5, 9999999);
+                    }
+                }
+            });
         }
     }
 
@@ -88,7 +74,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     }
 
     /// <summary>
-    /// Non-maxed Vengeful Temples
+    /// Multiple Vengeful Temples
     /// </summary>
     [HarmonyPatch(typeof(MonkeyTemple), nameof(MonkeyTemple.CheckTCBOO))]
     internal class MonkeyTemple_CheckTCBOO
@@ -103,8 +89,11 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
                 __instance.monkeyTempleModel.checkForThereCanOnlyBeOne &&
                 __instance.lastSacrificed != __instance.Sim.time.elapsed)
             {
-                var superMonkeys = __instance.Sim.towerManager.GetTowersByBaseId(TowerType.SuperMonkey).ToList()
-                    .Where(tower => tower.Id != __instance.tower.Id).ToList();
+                var superMonkeys = __instance.Sim.towerManager
+                    .GetTowersByBaseId(TowerType.SuperMonkey)
+                    .ToList()
+                    .Where(tower => tower.Id != __instance.tower.Id)
+                    .ToList<Tower>();
                 var robocop = superMonkeys.FirstOrDefault(tower => tower.towerModel.tiers[1] == 5);
                 var batman = superMonkeys.FirstOrDefault(tower => tower.towerModel.tiers[2] == 5);
                 if (batman != default && robocop != default)
