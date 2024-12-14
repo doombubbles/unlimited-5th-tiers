@@ -23,4 +23,10 @@ public class Settings : ModSettings
         displayName = "Allow Unlimited VTSGs",
         icon = VanillaSprites.SuperMonkey555
     };
+        
+    public static readonly ModSettingBool AllowNonMaxedVTSGs = new(true)
+    {
+        displayName = "Allow Non Maxed VTSGs",
+        icon = VanillaSprites.SuperMonkey555
+    };
 }

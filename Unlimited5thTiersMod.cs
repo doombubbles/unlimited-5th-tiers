@@ -5,6 +5,7 @@ using HarmonyLib;
 using Il2CppAssets.Scripts.Models;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
 using Il2CppAssets.Scripts.Models.TowerSets;
 using Il2CppAssets.Scripts.Simulation.Input;
 using Il2CppAssets.Scripts.Simulation.Towers;
@@ -12,6 +13,7 @@ using Il2CppAssets.Scripts.Simulation.Towers.Behaviors;
 using Il2CppSystem.Collections.Generic;
 using MelonLoader;
 using Unlimited5thTiers;
+
 [assembly: MelonInfo(typeof(Unlimited5thTiersMod), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
@@ -30,6 +32,11 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
             {
                 monkeyTempleModel.towerGroupCount = 4;
             }
+        }
+
+        foreach (var towerModel in gameModel.towers.Where(model => model.tier >= 5))
+        {
+            towerModel.GetDescendants<LimitProjectileModel>().ForEach(model => model.globalForPlayer = false);
         }
     }
 
@@ -66,7 +73,9 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPostfix]
         public static void Postfix(MonkeyTemple __instance)
         {
-            if (__instance.monkeyTempleModel.checkForThereCanOnlyBeOne && !__instance.checkTCBOO)
+            if (Settings.AllowNonMaxedVTSGs &&
+                __instance.monkeyTempleModel.checkForThereCanOnlyBeOne &&
+                !__instance.checkTCBOO)
             {
                 __instance.checkTCBOO = true;
             }
