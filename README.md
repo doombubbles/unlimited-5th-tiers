@@ -1,9 +1,10 @@
+<h1 align="center">
 <a href="https://github.com/doombubbles/unlimited-5th-tiers/releases/latest/download/Unlimited5thTiers.dll">
     <img align="left" alt="Icon" height="90" src="Icon.png">
     <img align="right" alt="Download" height="75" src="https://raw.githubusercontent.com/gurrenm3/BTD-Mod-Helper/master/BloonsTD6%20Mod%20Helper/Resources/DownloadBtn.png">
 </a>
-
-<h1 align="center">Unlimited 5th Tiers +</h1>
+Unlimited 5th Tiers +
+</h1>
 
 ### Lets you use any amount of fifth tier towers in BTD6, and more
 
