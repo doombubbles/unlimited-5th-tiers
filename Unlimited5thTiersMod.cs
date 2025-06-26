@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BTD_Mod_Helper;
 using BTD_Mod_Helper.Extensions;
 using HarmonyLib;
@@ -28,7 +29,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     {
         foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
         {
-            if (superMonkey.GetDescendant<MonkeyTempleModel>() is { towerGroupCount: < 4 } monkeyTempleModel)
+            if (superMonkey.GetDescendant<MonkeyTempleModel>() is {towerGroupCount: < 4} monkeyTempleModel)
             {
                 monkeyTempleModel.towerGroupCount = 4;
             }
@@ -49,15 +50,40 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPostfix]
         private static void Postfix(TowerInventory __instance, IEnumerable<TowerDetailsModel> towers)
         {
-            if (!Settings.AllowUnlimited5thTiers) return;
-
             towers.ForEach(towerDetails =>
             {
-                if (towerDetails.Is<ShopTowerDetailsModel>())
+                if (Settings.AllowUnlimited5thTiers && towerDetails.Is<ShopTowerDetailsModel>())
                 {
                     for (var path = 0; path < 3; path++)
                     {
                         __instance.AddTierRestriction(towerDetails.towerId, path, 5, 9999999);
+                    }
+                }
+            });
+        }
+    }
+
+    /// <summary>
+    /// Unlimited Heroes
+    /// </summary>
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.SetTowerMaxes))]
+    internal static class TowerInventory_SetTowerMaxes
+    {
+        [HarmonyPrefix]
+        internal static void Prefix(IEnumerable<TowerDetailsModel> towers)
+        {
+            towers.ForEach(towerDetails =>
+            {
+                if (towerDetails.Is(out HeroDetailsModel heroDetails))
+                {
+                    if (Settings.ShowAllHeroesInGame && heroDetails.towerCount == 0)
+                    {
+                        heroDetails.towerCount = 1;
+                    }
+
+                    if (Settings.AllowUnlimitedHeroes && heroDetails.towerCount != 0)
+                    {
+                        heroDetails.towerCount = -1;
                     }
                 }
             });
@@ -163,6 +189,22 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
             }
 
             return true;
+        }
+    }
+
+    /// <summary>
+    /// Pasting paragons
+    /// </summary>
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.HasInventory))]
+    internal static class TowerInventory_HasInventory
+    {
+        [HarmonyPostfix]
+        internal static void Postfix(TowerInventory __instance, TowerModel def, ref bool __result)
+        {
+            if (Settings.AllowUnlimitedParagons && def.isParagon)
+            {
+                __result = true;
+            }
         }
     }
 }

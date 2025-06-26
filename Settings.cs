@@ -29,4 +29,17 @@ public class Settings : ModSettings
         displayName = "Allow Non Maxed VTSGs",
         icon = VanillaSprites.SuperMonkey555
     };
+
+    public static readonly ModSettingBool AllowUnlimitedHeroes = new(false)
+    {
+        displayName = "Allow Unlimited Heroes",
+        icon = VanillaSprites.HeroesIcon
+    };
+
+    public static readonly ModSettingBool ShowAllHeroesInGame = new(false)
+    {
+        displayName = "Show All Heroes in Game",
+        icon = VanillaSprites.HeroesIcon
+    };
+
 }
