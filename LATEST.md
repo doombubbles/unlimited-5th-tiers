@@ -1,3 +1,1 @@
-- Added a new setting for allowing Unlimited Heroes (defaults to false)
-- Added a new setting for always showing all heroes in the shop (defaults to false)
-- When used with [Useful Utilities](https://github.com/doombubbles/useful-utilities#readme), copy pasting will now work for Paragons and Heroes
+- Fixed for BTD6 v50

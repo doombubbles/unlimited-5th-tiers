@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BTD_Mod_Helper;
 using BTD_Mod_Helper.Extensions;
 using HarmonyLib;
@@ -27,7 +26,7 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     /// </summary>
     public override void OnNewGameModel(GameModel gameModel)
     {
-        foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey))
+        foreach (var superMonkey in gameModel.GetTowersWithBaseId(TowerType.SuperMonkey).AsIEnumerable())
         {
             if (superMonkey.GetDescendant<MonkeyTempleModel>() is {towerGroupCount: < 4} monkeyTempleModel)
             {
