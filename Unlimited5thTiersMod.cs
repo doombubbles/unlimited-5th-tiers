@@ -49,9 +49,11 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
         [HarmonyPostfix]
         private static void Postfix(TowerInventory __instance, IEnumerable<TowerDetailsModel> towers)
         {
+            if (!Settings.AllowUnlimited5thTiers) return;
+
             towers.ForEach(towerDetails =>
             {
-                if (Settings.AllowUnlimited5thTiers && towerDetails.Is<ShopTowerDetailsModel>())
+                if (towerDetails.Is<ShopTowerDetailsModel>())
                 {
                     for (var path = 0; path < 3; path++)
                     {
@@ -59,6 +61,27 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
                     }
                 }
             });
+        }
+    }
+
+    /// <summary>
+    /// Unlimited 3rd Tier Powers Pro
+    /// </summary>
+    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.SetPowersProTierMaxes))]
+    internal static class TowerInventory_SetPowersProTierMaxes
+    {
+        [HarmonyPostfix]
+        internal static void Postfix(TowerInventory __instance, GameModel model)
+        {
+            if (!Settings.AllowUnlimited3rdTierPowersPro) return;
+
+            foreach (var powerProModel in model.powersPro)
+            {
+                for (var path = 0; path < 3; path++)
+                {
+                    __instance.AddTierRestriction(powerProModel.tower.baseId, path, 3, 9999999);
+                }
+            }
         }
     }
 

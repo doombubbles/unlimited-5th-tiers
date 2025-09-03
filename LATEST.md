@@ -1,1 +1,1 @@
-- Fixed for BTD6 v50
+- Added a new setting Allow Unlimited 3rd Tier Powers Pro

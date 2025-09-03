@@ -8,8 +8,14 @@ public class Settings : ModSettings
 {
     public static readonly ModSettingBool AllowUnlimited5thTiers = new(true)
     {
-        displayName = "Allow Unlimited 5th Tiers",
+        displayName = "Allow Unlimited 5th Tier Towers",
         icon = GetTextureGUID<Unlimited5thTiersMod>("Icon")
+    };
+
+    public static readonly ModSettingBool AllowUnlimited3rdTierPowersPro = new(true)
+    {
+        displayName = "Allow Unlimited 3rd Tier Powers Pro",
+        icon = VanillaSprites.PowersProLaunchShop
     };
 
     public static readonly ModSettingBool AllowUnlimitedParagons = new(true)
