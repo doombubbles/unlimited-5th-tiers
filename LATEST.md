@@ -1,1 +1,1 @@
-- Added a new setting Allow Unlimited 3rd Tier Powers Pro
+- Fix copy/pasting paragons interaction

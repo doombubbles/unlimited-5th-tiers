@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using BTD_Mod_Helper;
 using BTD_Mod_Helper.Extensions;
 using HarmonyLib;
@@ -217,11 +218,17 @@ public class Unlimited5thTiersMod : BloonsTD6Mod
     /// <summary>
     /// Pasting paragons
     /// </summary>
-    [HarmonyPatch(typeof(TowerInventory), nameof(TowerInventory.HasInventory))]
+    [HarmonyPatch]
     internal static class TowerInventory_HasInventory
     {
+        private static System.Collections.Generic.IEnumerable<MethodBase> TargetMethods()
+        {
+            yield return AccessTools.Method(typeof(TowerInventory), nameof(TowerInventory.HasInventory));
+            yield return AccessTools.Method(typeof(TowerInventory), nameof(TowerInventory.HasUpgradeInventory));
+        }
+
         [HarmonyPostfix]
-        internal static void Postfix(TowerInventory __instance, TowerModel def, ref bool __result)
+        internal static void Postfix(TowerModel def, ref bool __result)
         {
             if (Settings.AllowUnlimitedParagons && def.isParagon)
             {
