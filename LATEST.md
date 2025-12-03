@@ -1,1 +1,1 @@
-- Fix copy/pasting paragons interaction
+- Recompiled for v52
