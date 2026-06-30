@@ -1,0 +1,31 @@
+[package]
+name = "Unlimited5thTiers"
+namespace = "doombubbles"
+description = "Unlimited amount of the same 5th tier tower allowed, Unlimited amount of the same Paragon tower allowed, Unlimited amount of Vengeful True Sun Gods allowed, Unlimited amount of the same hero (+ using all heroes at once)"
+websiteUrl = "https://github.com/doombubbles/Unlimited5thTiers"
+
+[package.dependencies]
+LavaGang-MelonLoader = "0.7.3"
+doombubbles-Btd6ModHelper = "3.6.5"
+
+[build]
+icon = "./Icon.png"
+readme = "./README.md"
+outdir = "bin"
+
+[[build.copy]]
+source = "./bin/Release/Unlimited5thTiers.dll"
+target = "Unlimited5thTiers.dll"
+
+[[build.copy]]
+source = "./CHANGELOG.md"
+target = "./CHANGELOG.md"
+
+[[build.copy]]
+source = "./LICENSE"
+target = "./LICENSE"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = ["bloons-td-6"]
+categories = ["mods"]

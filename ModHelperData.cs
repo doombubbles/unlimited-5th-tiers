@@ -18,5 +18,6 @@ public static class ModHelperData
         """;
 
     public const string RepoOwner = "doombubbles";
-    public const string RepoName = "unlimited-5th-tiers";
+    public const string PrevRepoName = "unlimited-5th-tiers";
+    public const string RepoName = "Unlimited5thTiers";
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using BTD_Mod_Helper;
 using BTD_Mod_Helper.Extensions;
@@ -17,6 +17,7 @@ using Unlimited5thTiers;
 
 [assembly: MelonInfo(typeof(Unlimited5thTiersMod), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
+[assembly: MelonGame("Ninja Kiwi", "BloonsTD6-Epic")]
 
 namespace Unlimited5thTiers;
 
